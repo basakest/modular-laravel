@@ -2,22 +2,12 @@
 
 namespace Modules\Product;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-
-class CartItem extends Model
+readonly class CartItem
 {
-    use HasFactory;
-
-    protected $fillable = [
-        'quantity',
-        'user_id',
-        'product_id',
-    ];
-
-    protected $casts = [
-        'quantity'   => 'integer',
-        'user_id'    => 'integer',
-        'product_id' => 'integer',
-    ];
+    public function __construct(
+        public ProductDto $product,
+        public int $quantity,
+    )
+    {
+    }
 }
