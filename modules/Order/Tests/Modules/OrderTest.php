@@ -1,6 +1,6 @@
 <?php
 
-use Modules\Order\Order;
+use Modules\Order\Models\Order;
 
 it('can create an order', function () {
     $order = new Order();

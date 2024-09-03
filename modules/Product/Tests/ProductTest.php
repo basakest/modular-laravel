@@ -1,6 +1,6 @@
 <?php
 
-use Modules\Product\Product;
+use Modules\Product\Models\Product;
 
 it('can create a product', function () {
     $order = Product::factory()->create();

@@ -2,11 +2,19 @@
 
 namespace Modules\Payment;
 
-use http\Exception\RuntimeException;
 use Illuminate\Support\Str;
 
-final class ImaginaryPaymentProvider
+final class PayBuddy
 {
+    /**
+     * @param string $token
+     * @param int    $amountInCents
+     * @param string $statementDescription
+     *
+     * @throws \RuntimeException
+     *
+     * @return array
+     */
     public function charge(string $token, int $amountInCents, string $statementDescription): array
     {
         $this->validateToken($token);
@@ -22,22 +30,32 @@ final class ImaginaryPaymentProvider
         ];
     }
 
-    public static function make(): ImaginaryPaymentProvider
+    public static function make(): PayBuddy
     {
         return new self();
+    }
+
+    public static function validToken(): string
+    {
+        return strval(Str::uuid());
+    }
+
+    public static function invalidToken(): string
+    {
+        return substr(self::validToken(), -35);
     }
 
     /**
      * @param string $token
      *
-     * @return void
      * @throws \RuntimeException
      *
+     * @return void
      */
     protected function validateToken(string $token): void
     {
-        if (!Str::isUlid($token)) {
-            throw new RuntimeException('The given payment token is not valid.');
+        if (! Str::isUuid($token)) {
+            throw new \RuntimeException('The given payment token is not valid.');
         }
     }
 }

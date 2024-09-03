@@ -53,17 +53,17 @@ namespace Modules\Order{
  * @property string $payment_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|Order newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Order newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Order query()
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaymentGateway($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaymentId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereTotalInCents($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Models\Order newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Models\Order newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Models\Order query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Models\Order whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Models\Order whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Models\Order wherePaymentGateway($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Models\Order wherePaymentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Models\Order whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Models\Order whereTotalInCents($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Models\Order whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Models\Order whereUserId($value)
  */
 	class Order extends \Eloquent {}
 }
@@ -79,16 +79,16 @@ namespace Modules\Order{
  * @property int $quantity
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|OrderLine newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|OrderLine newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|OrderLine query()
- * @method static \Illuminate\Database\Eloquent\Builder|OrderLine whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|OrderLine whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|OrderLine whereOrderId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|OrderLine whereProductId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|OrderLine whereProductPriceInCents($value)
- * @method static \Illuminate\Database\Eloquent\Builder|OrderLine whereQuantity($value)
- * @method static \Illuminate\Database\Eloquent\Builder|OrderLine whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Models\OrderLine newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Models\OrderLine newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Models\OrderLine query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Models\OrderLine whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Models\OrderLine whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Models\OrderLine whereOrderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Models\OrderLine whereProductId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Models\OrderLine whereProductPriceInCents($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Models\OrderLine whereQuantity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Models\OrderLine whereUpdatedAt($value)
  */
 	class OrderLine extends \Eloquent {}
 }
@@ -127,15 +127,15 @@ namespace Modules\Product{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Modules\Product\Database\Factories\ProductFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder|Product newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Product newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Product query()
- * @method static \Illuminate\Database\Eloquent\Builder|Product whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Product whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Product whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Product wherePriceInCents($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Product whereStock($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Product whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Models\Product newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Models\Product newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Models\Product query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Models\Product whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Models\Product whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Models\Product whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Models\Product wherePriceInCents($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Models\Product whereStock($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Models\Product whereUpdatedAt($value)
  */
 	class Product extends \Eloquent {}
 }

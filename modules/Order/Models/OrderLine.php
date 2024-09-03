@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Order;
+namespace Modules\Order\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,7 +12,7 @@ class OrderLine extends Model
     protected $fillable = [
         'order_id',
         'product_id',
-        'product_price',
+        'product_price_in_cents',
         'quantity',
     ];
 
