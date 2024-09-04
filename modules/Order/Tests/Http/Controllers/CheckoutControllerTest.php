@@ -73,4 +73,6 @@ it('will fails when using an invalid token', function () {
 
     $response->assertStatus(422)
         ->assertJsonValidationErrors(['payment_token']);
+
+    expect(Order::query()->count())->toBe(0);
 });
