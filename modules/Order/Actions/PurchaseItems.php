@@ -3,7 +3,6 @@
 namespace Modules\Order\Actions;
 
 use Illuminate\Database\DatabaseManager;
-use Illuminate\Validation\ValidationException;
 use Modules\Order\Exceptions\PaymentFailedException;
 use Modules\Order\Models\Order;
 use Modules\Payment\Actions\CreatePaymentForOrder;
@@ -33,26 +32,17 @@ class PurchaseItems
      */
     public function handle(CartItemCollection $items, PayBuddy $paymentProvider, string $paymentToken, int $userId): Order
     {
-        $orderTotalInCents = $items->totalInCents();
-
-        return $this->databaseManager->transaction(function () use ($paymentToken, $paymentProvider, $items, $userId, $orderTotalInCents) {
-            $order = Order::query()->create([
-                'status'         => 'completed',
-                'total_in_cents' => $orderTotalInCents,
-                'user_id'        => $userId,
-            ]);
+        return $this->databaseManager->transaction(function () use ($paymentToken, $paymentProvider, $items, $userId) {
+            // 前两个方法只在内存中操作, 最后用一个单独的方法写入数据库, 这样做有什么好处吗, 方便回滚吗, 暂时只想到了这一个好处
+            $order = Order::startForUser($userId);
+            $order->addLinesFromCartItems($items);
+            $order->fulfill();
 
             foreach ($items->items() as $cartItem) {
                 $this->productStockManager->decrement($cartItem->product->id, $cartItem->quantity);
-
-                $order->lines()->create([
-                    'product_id'             => $cartItem->product->id,
-                    'product_price_in_cents' => $cartItem->product->priceInCents,
-                    'quantity'               => $cartItem->quantity,
-                ]);
             }
 
-            $this->createPaymentForOrder->handle($order->id, $userId, $orderTotalInCents, $paymentProvider, $paymentToken);
+            $this->createPaymentForOrder->handle($order->id, $userId, $items->totalInCents(), $paymentProvider, $paymentToken);
 
             return $order;
         });
