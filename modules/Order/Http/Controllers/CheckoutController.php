@@ -8,7 +8,6 @@ use Modules\Order\Http\Requests\CheckoutRequest;
 use Modules\Order\Models\Order;
 use Modules\Payment\PayBuddy;
 use Modules\Product\CartItemCollection;
-use Modules\Product\Models\Product;
 use Modules\Product\Warehouse\ProductStockManager;
 
 class CheckoutController
@@ -39,8 +38,7 @@ class CheckoutController
 
         $order = Order::query()->create([
             'payment_id'      => $charge['id'],
-            'status'          => 'paid',
-            'payment_gateway' => 'PayBuddy',
+            'status'          => 'completed',
             'total_in_cents'  => $orderTotalInCents,
             'user_id'         => $request->user()->id,
         ]);
@@ -54,6 +52,14 @@ class CheckoutController
                 'quantity'               => $cartItem->quantity,
             ]);
         }
+
+        $payment = $order->payments()->create([
+            'total_in_cents'  => $orderTotalInCents,
+            'status'          => 'paid',
+            'payment_gateway' => 'PayBuddy',
+            'payment_id'      => $charge['id'],
+            'user_id'         => $request->user()->id,
+        ]);
 
         return response()->json([], 201);
     }

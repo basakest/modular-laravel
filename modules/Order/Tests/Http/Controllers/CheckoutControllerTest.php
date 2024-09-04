@@ -5,6 +5,7 @@ use Illuminate\Database\Eloquent\Factories\Sequence;
 use Modules\Order\Models\Order;
 use Modules\Order\Models\OrderLine;
 use Modules\Payment\PayBuddy;
+use Modules\Payment\Payment;
 use Modules\Product\Models\Product;
 
 it('can create an order successfully', function () {
@@ -31,10 +32,17 @@ it('can create an order successfully', function () {
     $order = Order::query()->latest('id')->first();
     expect($order->user)->toEqual($user)
         ->and($order->total_in_cents)->toBe(60000)
-        ->and($order->status)->toBe('paid')
-        ->and($order->payment_gateway)->toBe('PayBuddy')
-        ->and(strlen($order->payment_id))->toBe(36)
+        ->and($order->status)->toBe('completed')
         ->and($order->lines)->toHaveCount(2);
+
+    // payment
+    /** @var $payment Payment */
+    $payment = $order->lastPayment;
+    expect($payment->status)->toBe('paid')
+        ->and($payment->payment_gateway)->toBe('PayBuddy')
+        ->and(strlen($payment->payment_id))->toBe(36)
+        ->and($payment->total_in_cents)->toBe(60000)
+        ->and($payment->user)->toEqual($user);
 
     foreach ($products as $product) {
         /** @var OrderLine $orderLine */

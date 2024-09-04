@@ -49,20 +49,19 @@ namespace Modules\Order\Models{
  * @property int $user_id
  * @property int $total_in_cents
  * @property string $status
- * @property string $payment_gateway
- * @property string $payment_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Modules\Payment\Payment|null $lastPayment
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Order\Models\OrderLine> $lines
  * @property-read int|null $lines_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Payment\Payment> $payments
+ * @property-read int|null $payments_count
  * @property-read \App\Models\User|null $user
  * @method static \Illuminate\Database\Eloquent\Builder|Order newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Order newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Order query()
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaymentGateway($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaymentId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereTotalInCents($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereUpdatedAt($value)
@@ -96,27 +95,35 @@ namespace Modules\Order\Models{
 	class OrderLine extends \Eloquent {}
 }
 
-namespace Modules\Product{
+namespace Modules\Payment{
 /**
  * 
  *
  * @property int $id
- * @property int $quantity
+ * @property int $total_in_cents
+ * @property string $status
+ * @property string $payment_gateway
+ * @property string $payment_id
  * @property int $user_id
- * @property int $product_id
+ * @property int $order_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|Models\CartItem newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Models\CartItem newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Models\CartItem query()
- * @method static \Illuminate\Database\Eloquent\Builder|Models\CartItem whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Models\CartItem whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Models\CartItem whereProductId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Models\CartItem whereQuantity($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Models\CartItem whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Models\CartItem whereUserId($value)
+ * @property-read \Modules\Order\Models\Order|null $order
+ * @property-read \App\Models\User|null $user
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment whereOrderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment wherePaymentGateway($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment wherePaymentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment whereTotalInCents($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment whereUserId($value)
  */
-	class CartItem extends \Eloquent {}
+	class Payment extends \Eloquent {}
 }
 
 namespace Modules\Product\Models{

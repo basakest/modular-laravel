@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Modules\Payment\Payment;
 
 class Order extends Model
 {
@@ -16,8 +18,6 @@ class Order extends Model
         'user_id',
         'status',
         'total_in_cents',
-        'payment_gateway',
-        'payment_id',
     ];
 
     protected $casts = [
@@ -33,5 +33,15 @@ class Order extends Model
     public function lines(): HasMany
     {
         return $this->hasMany(OrderLine::class);
+    }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    public function lastPayment(): HasOne
+    {
+        return $this->payments()->one()->latest();
     }
 }

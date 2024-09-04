@@ -1,12 +1,9 @@
 <?php
 
-use Modules\Order\Providers\OrderServiceProvider;
-use Modules\Product\Providers\ProductServiceProvider;
-use Modules\Shipment\Providers\ShipmentServiceProvider;
-
 return [
     App\Providers\AppServiceProvider::class,
-    OrderServiceProvider::class,
-    ProductServiceProvider::class,
-    ShipmentServiceProvider::class,
+    Modules\Order\Providers\OrderServiceProvider::class,
+    Modules\Product\Providers\ProductServiceProvider::class,
+    Modules\Shipment\Providers\ShipmentServiceProvider::class,
+    Modules\Payment\Infrastructure\Providers\PaymentServiceProvider::class,
 ];
