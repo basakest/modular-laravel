@@ -3,7 +3,9 @@
 namespace Modules\Order\Actions;
 
 use Illuminate\Database\DatabaseManager;
+use Illuminate\Support\Facades\Mail;
 use Modules\Order\Exceptions\PaymentFailedException;
+use Modules\Order\Mail\OrderReceived;
 use Modules\Order\Models\Order;
 use Modules\Payment\Actions\CreatePaymentForOrder;
 use Modules\Payment\PayBuddy;
@@ -25,14 +27,16 @@ class PurchaseItems
      * @param PayBuddy           $paymentProvider
      * @param string             $paymentToken
      * @param int                $userId
+     * @param string             $userEmail
      *
      * @return Order
      *
-     * @throws PaymentFailedException
+     * @throws \Throwable
      */
-    public function handle(CartItemCollection $items, PayBuddy $paymentProvider, string $paymentToken, int $userId): Order
+    public function handle(CartItemCollection $items, PayBuddy $paymentProvider, string $paymentToken, int $userId, string $userEmail): Order
     {
-        return $this->databaseManager->transaction(function () use ($paymentToken, $paymentProvider, $items, $userId) {
+        /** @var Order $order */
+        $order = $this->databaseManager->transaction(function () use ($paymentToken, $paymentProvider, $items, $userId) {
             // 前两个方法只在内存中操作, 最后用一个单独的方法写入数据库, 这样做有什么好处吗, 方便回滚吗, 暂时只想到了这一个好处
             $order = Order::startForUser($userId);
             $order->addLinesFromCartItems($items);
@@ -46,5 +50,9 @@ class PurchaseItems
 
             return $order;
         });
+
+        Mail::to($userEmail)->send(new OrderReceived($order->localizedTotal()));
+
+        return $order;
     }
 }

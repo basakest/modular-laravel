@@ -2,6 +2,8 @@
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Sequence;
+use Illuminate\Support\Facades\Mail;
+use Modules\Order\Mail\OrderReceived;
 use Modules\Order\Models\Order;
 use Modules\Order\Models\OrderLine;
 use Modules\Payment\PayBuddy;
@@ -9,6 +11,7 @@ use Modules\Payment\Payment;
 use Modules\Product\Models\Product;
 
 it('can create an order successfully', function () {
+    Mail::fake();
     // 这里获取到的 User 实例的 table 属性为 null, 在 User 类中指定 table 后正常返回
     $user = User::factory()->create();
     $products = Product::factory(2)->create(
@@ -29,7 +32,11 @@ it('can create an order successfully', function () {
 
     $order = Order::query()->latest('id')->first();
 
-    $response->assertJson(['order_url' => $order->url()])->assertStatus(201);;
+    $response->assertJson(['order_url' => $order->url()])->assertStatus(201);
+
+    Mail::assertSent(OrderReceived::class, function (OrderReceived $mail) use ($user) {
+        return $mail->hasTo($user->email);
+    });
 
     expect($order->user)->toEqual($user)
         ->and($order->total_in_cents)->toBe(60000)
