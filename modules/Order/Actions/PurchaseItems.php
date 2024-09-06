@@ -2,12 +2,14 @@
 
 namespace Modules\Order\Actions;
 
+use App\Models\UserDto;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Events\Dispatcher;
+use Modules\Order\DTOs\OrderDto;
+use Modules\Order\DTOs\PendingPayment;
 use Modules\Order\Events\OrderFulfilled;
 use Modules\Order\Models\Order;
 use Modules\Payment\Actions\CreatePaymentForOrder;
-use Modules\Payment\PayBuddy;
 use Modules\Product\CartItemCollection;
 use Modules\Product\Warehouse\ProductStockManager;
 use Throwable;
@@ -25,37 +27,34 @@ class PurchaseItems
 
     /**
      * @param CartItemCollection $items
-     * @param PayBuddy           $paymentProvider
-     * @param string             $paymentToken
-     * @param int                $userId
-     * @param string             $userEmail
+     * @param PendingPayment     $pendingPayment
+     * @param UserDto            $user
      *
-     * @return Order
+     * @return OrderDto
      *
      * @throws Throwable
      */
-    public function handle(CartItemCollection $items, PayBuddy $paymentProvider, string $paymentToken, int $userId, string $userEmail): Order
+    public function handle(CartItemCollection $items, PendingPayment $pendingPayment, UserDto $user): OrderDto
     {
-        /** @var Order $order */
-        $order = $this->databaseManager->transaction(function () use ($paymentToken, $paymentProvider, $items, $userId) {
+        /** @var OrderDto $order */
+        $order = $this->databaseManager->transaction(function () use ($pendingPayment, $items, $user) {
             // 前两个方法只在内存中操作, 最后用一个单独的方法写入数据库, 这样做有什么好处吗, 方便回滚吗, 暂时只想到了这一个好处
-            $order = Order::startForUser($userId);
+            $order = Order::startForUser($user->id);
             $order->addLinesFromCartItems($items);
             $order->fulfill();
 
-            $this->createPaymentForOrder->handle($order->id, $userId, $items->totalInCents(), $paymentProvider, $paymentToken);
+            $this->createPaymentForOrder->handle(
+                $order->id,
+                $user->id,
+                $items->totalInCents(),
+                $pendingPayment->provider,
+                $pendingPayment->paymentToken
+            );
 
-            return $order;
+            return OrderDto::fromEloquentModel($order);
         });
 
-        $this->events->dispatch(new OrderFulfilled(
-            orderId: $order->id,
-            totalInCents: $order->total_in_cents,
-            localizedTotal: $order->localizedTotal(),
-            cartItems: $items,
-            userId: $userId,
-            userEmail: $userEmail
-        ));
+        $this->events->dispatch(new OrderFulfilled($order, $user));
 
         return $order;
     }
