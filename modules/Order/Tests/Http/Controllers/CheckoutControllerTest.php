@@ -6,11 +6,13 @@ use Illuminate\Support\Facades\Mail;
 use Modules\Order\Mail\OrderReceived;
 use Modules\Order\Models\Order;
 use Modules\Order\Models\OrderLine;
-use Modules\Payment\PayBuddy;
+use Modules\Payment\PayBuddySdk;
 use Modules\Payment\Payment;
+use Modules\Payment\PaymentProvider;
 use Modules\Product\Models\Product;
 
 it('can create an order successfully', function () {
+    $this->withoutExceptionHandling();
     Mail::fake();
     // 这里获取到的 User 实例的 table 属性为 null, 在 User 类中指定 table 后正常返回
     $user = User::factory()->create();
@@ -20,7 +22,7 @@ it('can create an order successfully', function () {
             ['name' => 'Macbook Pro M3', 'price_in_cents' => 50000, 'stock' => 10]
         )
     );
-    $paymentToken = PayBuddy::validToken();
+    $paymentToken = PayBuddySdk::validToken();
 
     $response = $this->actingAs($user)->post(route('order::checkout', [
         'payment_token' => $paymentToken,
@@ -47,7 +49,7 @@ it('can create an order successfully', function () {
     /** @var $payment Payment */
     $payment = $order->lastPayment;
     expect($payment->status)->toBe('paid')
-        ->and($payment->payment_gateway)->toBe('PayBuddy')
+        ->and($payment->payment_gateway)->toBe(PaymentProvider::PayBuddy)
         ->and(strlen($payment->payment_id))->toBe(36)
         ->and($payment->total_in_cents)->toBe(60000)
         ->and($payment->user)->toEqual($user);
@@ -68,7 +70,7 @@ it('can create an order successfully', function () {
 it('will fails when using an invalid token', function () {
     $user = User::factory()->create();
     $product = Product::factory()->create();
-    $paymentToken = PayBuddy::invalidToken();
+    $paymentToken = PayBuddySdk::invalidToken();
 
     $response = $this->actingAs($user)
         ->postJson(route('order::checkout', [

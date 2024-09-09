@@ -102,7 +102,7 @@ namespace Modules\Payment{
  * @property int $id
  * @property int $total_in_cents
  * @property string $status
- * @property string $payment_gateway
+ * @property \Modules\Payment\PaymentProvider $payment_gateway
  * @property string $payment_id
  * @property int $user_id
  * @property int $order_id

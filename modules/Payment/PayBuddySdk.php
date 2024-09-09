@@ -4,7 +4,7 @@ namespace Modules\Payment;
 
 use Illuminate\Support\Str;
 
-final class PayBuddy
+final class PayBuddySdk
 {
     /**
      * @param string $token
@@ -30,7 +30,7 @@ final class PayBuddy
         ];
     }
 
-    public static function make(): PayBuddy
+    public static function make(): PayBuddySdk
     {
         return new self();
     }
