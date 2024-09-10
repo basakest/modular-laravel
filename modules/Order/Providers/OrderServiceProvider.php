@@ -15,8 +15,8 @@ class OrderServiceProvider extends ServiceProvider
 
         $this->app->register(EventServiceProvider::class);
 
-        $this->loadViewsFrom(__DIR__ . '/../Views', 'order');
+        $this->loadViewsFrom(__DIR__ . '/../Ui/Views', 'order');
         Blade::componentNamespace('Modules\\Order\\ViewComponents', 'order');
-        Blade::anonymousComponentNamespace(__DIR__ . '/../Views/components', 'order');
+        Blade::anonymousComponentNamespace(__DIR__ . '/../Ui/Views/components', 'order');
     }
 }

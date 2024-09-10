@@ -7,6 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Modules\Order\DTOs\OrderDto;
 
 class OrderReceived extends Mailable
 {
@@ -16,7 +17,7 @@ class OrderReceived extends Mailable
      * Create a new message instance.
      */
     public function __construct(
-        public string $localizedOrderTotal
+        public OrderDto $order
     )
     {
     }
@@ -37,7 +38,7 @@ class OrderReceived extends Mailable
     public function content(): Content
     {
         return new Content(
-            htmlString: 'We have received your order of ' . $this->localizedOrderTotal
+            view: 'order::emails.order_received',
         );
     }
 
