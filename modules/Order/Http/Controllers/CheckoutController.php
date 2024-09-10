@@ -10,7 +10,7 @@ use Modules\Order\DTOs\PendingPayment;
 use Modules\Order\Http\Requests\CheckoutRequest;
 use Modules\Payment\Exceptions\PaymentFailedException;
 use Modules\Payment\PaymentGateway;
-use Modules\Product\CartItemCollection;
+use Modules\Product\Collections\CartItemCollection;
 
 class CheckoutController
 {

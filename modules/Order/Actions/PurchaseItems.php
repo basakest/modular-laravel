@@ -10,7 +10,7 @@ use Modules\Order\DTOs\PendingPayment;
 use Modules\Order\Events\OrderFulfilled;
 use Modules\Order\Models\Order;
 use Modules\Payment\Actions\CreatePaymentForOrder;
-use Modules\Product\CartItemCollection;
+use Modules\Product\Collections\CartItemCollection;
 use Modules\Product\Warehouse\ProductStockManager;
 use Throwable;
 

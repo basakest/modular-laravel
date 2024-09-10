@@ -10,8 +10,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Modules\Order\Exceptions\OrderMissingOrderLineException;
 use Modules\Payment\Payment;
-use Modules\Product\CartItem;
-use Modules\Product\CartItemCollection;
+use Modules\Product\Collections\CartItemCollection;
+use Modules\Product\DTOs\CartItem;
 use NumberFormatter;
 
 class Order extends Model
