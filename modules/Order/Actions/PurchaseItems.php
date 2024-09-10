@@ -4,12 +4,12 @@ namespace Modules\Order\Actions;
 
 use App\Models\UserDto;
 use Illuminate\Database\DatabaseManager;
-use Illuminate\Events\Dispatcher;
+use Illuminate\Contracts\Events\Dispatcher;
 use Modules\Order\DTOs\OrderDto;
 use Modules\Order\DTOs\PendingPayment;
 use Modules\Order\Events\OrderFulfilled;
 use Modules\Order\Models\Order;
-use Modules\Payment\Actions\CreatePaymentForOrder;
+use Modules\Payment\Actions\CreatePaymentForOrderInterface;
 use Modules\Product\Collections\CartItemCollection;
 use Modules\Product\Warehouse\ProductStockManager;
 use Throwable;
@@ -18,7 +18,7 @@ class PurchaseItems
 {
     public function __construct(
         protected ProductStockManager $productStockManager,
-        protected CreatePaymentForOrder $createPaymentForOrder,
+        protected CreatePaymentForOrderInterface $createPaymentForOrder,
         protected DatabaseManager $databaseManager,
         protected Dispatcher $events,
     )

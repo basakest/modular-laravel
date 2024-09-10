@@ -18,6 +18,13 @@ class CartItemCollection
     {
     }
 
+    public static function fromProduct(ProductDto $product, int $quantity = 1): CartItemCollection
+    {
+        return new self(collect([
+            new CartItem($product, $quantity),
+        ]));
+    }
+
     public static function fromCheckoutData(array $data): CartItemCollection
     {
         // DB::listen(function ($query) {
