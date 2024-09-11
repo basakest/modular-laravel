@@ -4,6 +4,7 @@ namespace Modules\Order\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Modules\Order\Database\Factories\OrderLineFactory;
 
 class OrderLine extends Model
 {
@@ -22,4 +23,14 @@ class OrderLine extends Model
         'product_price_in_cents' => 'integer',
         'quantity'               => 'integer',
     ];
+
+    protected static function newFactory(): OrderLineFactory
+    {
+        return new OrderLineFactory();
+    }
+
+    public function total(): int
+    {
+        return $this->product_price_in_cents * $this->quantity;
+    }
 }

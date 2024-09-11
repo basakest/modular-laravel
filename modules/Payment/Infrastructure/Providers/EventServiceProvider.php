@@ -1,16 +1,16 @@
 <?php
 
-namespace Modules\Product\Providers;
+namespace Modules\Payment\Infrastructure\Providers;
 
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as BaseEventServiceProvider;
-use Modules\Payment\PaymentSucceed;
-use Modules\Product\Events\DecreaseProductStock;
+use Modules\Order\Events\OrderStarted;
+use Modules\Payment\PayOrder;
 
 class EventServiceProvider extends BaseEventServiceProvider
 {
     protected $listen = [
-        PaymentSucceed::class => [
-            DecreaseProductStock::class,
+        OrderStarted::class => [
+            PayOrder::class,
         ],
     ];
 }

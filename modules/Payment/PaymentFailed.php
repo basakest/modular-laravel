@@ -1,15 +1,16 @@
 <?php
 
-namespace Modules\Order\Events;
+namespace Modules\Payment;
 
 use App\Models\UserDto;
 use Modules\Order\DTOs\OrderDto;
 
-readonly class OrderFulfilled
+readonly class PaymentFailed
 {
     public function __construct(
         public OrderDto $order,
         public UserDto $user,
+        public string $reason,
     )
     {
     }

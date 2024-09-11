@@ -57,6 +57,7 @@ namespace Modules\Order\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Payment\Payment> $payments
  * @property-read int|null $payments_count
  * @property-read \App\Models\User|null $user
+ * @method static \Modules\Order\Database\Factories\OrderFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Order newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Order newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Order query()

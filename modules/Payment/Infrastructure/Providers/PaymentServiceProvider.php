@@ -20,5 +20,7 @@ class PaymentServiceProvider extends ServiceProvider
 
         $this->app->bind(PaymentGateway::class, fn () => new PayBuddyGateway(new PayBuddySdk()));
         $this->app->bind(CreatePaymentForOrderInterface::class, fn () => new CreatePaymentForOrder());
+
+        $this->app->register(EventServiceProvider::class);
     }
 }

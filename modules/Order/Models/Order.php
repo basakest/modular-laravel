@@ -3,11 +3,13 @@
 namespace Modules\Order\Models;
 
 use App\Models\User;
+use http\Exception\RuntimeException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Modules\Order\Database\Factories\OrderFactory;
 use Modules\Order\Exceptions\OrderMissingOrderLineException;
 use Modules\Payment\Payment;
 use Modules\Product\Collections\CartItemCollection;
@@ -22,6 +24,8 @@ class Order extends Model
 
     public const PENDING = 'pending';
 
+    public const PAYMENT_FAILED = 'payment_failed';
+
     protected $fillable = [
         'user_id',
         'status',
@@ -32,6 +36,11 @@ class Order extends Model
         'user_id'        => 'integer',
         'total_in_cents' => 'integer',
     ];
+
+    protected static function newFactory(): OrderFactory
+    {
+        return new OrderFactory();
+    }
 
     public function user(): BelongsTo
     {
@@ -66,6 +75,15 @@ class Order extends Model
         ]);
     }
 
+    public function addLines(array $lines): void
+    {
+        foreach ($lines as $line) {
+            $this->lines->push($line);
+        }
+
+        $this->total_in_cents = $this->lines->sum(fn (OrderLine $line) => $line->total());
+    }
+
     /**
      * @param CartItemCollection<CartItem> $items
      *
@@ -85,16 +103,38 @@ class Order extends Model
         $this->total_in_cents = $this->lines->sum(fn (OrderLine $line) => $line->product_price_in_cents * $item->quantity);
     }
 
+    public function markAsFailed(): void
+    {
+        if ($this->isCompleted()) {
+            throw new RuntimeException('A completed order cannot be marked as failed.');
+        }
+
+        $this->status = self::PAYMENT_FAILED;
+
+        $this->save();
+    }
+
+    public function isCompleted(): bool
+    {
+        return $this->status === self::COMPLETED;
+    }
+
+    public function complete(): void
+    {
+        $this->status = self::COMPLETED;
+        $this->save();
+    }
+
     /**
      * @throws OrderMissingOrderLineException
      */
-    public function fulfill(): void
+    public function start(): void
     {
         if ($this->lines->isEmpty()) {
             throw new OrderMissingOrderLineException();
         }
 
-        $this->status = self::COMPLETED;
+        $this->status = self::PENDING;
 
         $this->save();
         $this->lines()->saveMany($this->lines);

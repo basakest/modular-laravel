@@ -27,7 +27,8 @@
             "Database\\Seeders\\": "database/seeders/",
             "Modules\\": "modules/",
             "Modules\\Product\\": "modules/Product/src/",
-            "Modules\\Product\\Database\\Factories\\": "modules/Product/database/Factories/"
+            "Modules\\Product\\Database\\Factories\\": "modules/Product/database/Factories/",
+            "Modules\\Order\\Database\\Factories\\": "modules/Order/Database/Factories/"
         }
     },
     "autoload-dev": {
